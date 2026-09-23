@@ -1,0 +1,28 @@
+# Dependências
+node_modules/
+
+# Ambiente
+backend/.env
+
+# Banco de dados (não versionar dados de produção)
+backend/data/
+
+# Uploads de fotos (não versionar no git)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WhatsApp Web cache
+backend/.wwebjs_cache/
+backend/.wwebjs_auth/
+
+# Editor
+.vscode/settings.json
+*.swp

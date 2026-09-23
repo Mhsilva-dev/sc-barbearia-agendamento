@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#08080A">
+<meta name="description" content="SC Barbearia — Agendamento online. Serra do Salitre, MG.">
+<title>SC Barbearia — Serra do Salitre MG</title>
+<link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/main.css?v=5">
+<style>
+  /* Horário já agendado — indisponível */
+  .time-slot.ocu {
+    background: #1e1a2a !important;
+    border: 1px solid #4a3a6b !important;
+    color: #7a6a9a !important;
+    cursor: not-allowed !important;
+    opacity: 0.85 !important;
+    line-height: 1.3 !important;
+  }
+  .time-slot.ocu:hover {
+    background: #261f35 !important;
+    border-color: #6a5a8a !important;
+    color: #9a8aba !important;
+  }
+  /* Horário já passou */
+  .time-slot.passado {
+    background: #111 !important;
+    border: 1px solid #2a2a2a !important;
+    color: #444 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+    line-height: 1.3 !important;
+    text-decoration: line-through !important;
+  }
+  .time-slot.passado:hover {
+    background: #151515 !important;
+    border-color: #333 !important;
+    color: #555 !important;
+  }
+  /* Sublabel dentro do slot */
+  .time-slot .slot-label {
+    display: block !important;
+    font-size: .58rem !important;
+    letter-spacing: .4px !important;
+    opacity: .8 !important;
+    margin-top: .1rem !important;
+    text-decoration: none !important;
+  }
+  .cal-day.bloq {
+    background: #4a0a0a !important;
+    color: #fc8181 !important;
+    border-radius: 4px !important;
+    cursor: not-allowed !important;
+  }
+</style>
+</head>
+<body>
+
+<!-- ░░ MOBILE DRAWER ░░ -->
+<div class="mobile-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+  <button class="drawer-close" onclick="closeDrawer()" aria-label="Fechar menu">✕</button>
+  <button class="drawer-nav-item" onclick="navTo('home')">Início</button>
+  <button class="drawer-nav-item" onclick="navTo('booking')">Agendar</button>
+  <button class="drawer-nav-item" onclick="navTo('location')">Localização</button>
+</div>
+
+<!-- ░░ HEADER ░░ -->
+<header id="hdr" role="banner">
+  <div class="hdr-brand" onclick="navTo('home')" role="button" tabindex="0" aria-label="SC Barbearia — Ir para início">
+    <img class="hdr-brand-logo" src="/images/logo.jpg" alt="SC Barbearia">
+    <div class="hdr-brand-text">
+      <span class="hdr-brand-name">SC Barbearia</span>
+      <span class="hdr-brand-loc">Serra do Salitre · MG</span>
+    </div>
+  </div>
+  <nav class="hdr-nav" aria-label="Navegação principal">
+    <button class="nav-item active" id="nav-home"     onclick="navTo('home')">Início</button>
+    <button class="nav-item"        id="nav-booking"  onclick="navTo('booking')">Agendar</button>
+    <button class="nav-item"        id="nav-location" onclick="navTo('location')">Localização</button>
+    <button class="btn btn-solid btn-sm nav-cta"      onclick="navTo('booking')">Agendar Agora</button>
+  </nav>
+  <button class="hdr-menu-btn" onclick="openDrawer()" aria-label="Abrir menu" id="menu-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="3" y1="6"  x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</header>
+
+<!-- ══════════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Apresentação">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="t-label">Barbearia Premium · Serra do Salitre</span>
+      </div>
+      <h1 class="t-display hero-title">
+        SC<br>
+        <span class="accent">BARBEARIA</span>
+      </h1>
+      <p class="hero-desc">Arte, precisão e estilo em cada detalhe. Agende seu horário e chegue pronto para impressionar.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-dot"></div>
+        Serra do Salitre, MG &nbsp;·&nbsp; @sc_barbearia00
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-solid" onclick="navTo('booking')">📅 Agendar Horário</button>
+        <button class="btn btn-outline" onclick="navTo('location')">📍 Como Chegar</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-n">100%</div><div class="hero-stat-l">Qualidade</div></div>
+        <div><div class="hero-stat-n">✂</div><div class="hero-stat-l">Precisão</div></div>
+        <div><div class="hero-stat-n">MG</div><div class="hero-stat-l">Serra do Salitre</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right" aria-hidden="true">
+      <img class="hero-right-img" src="/images/logo.jpg" alt="">
+      <div class="hero-right-overlay"></div>
+      <div class="hero-badge">
+        <div class="hero-badge-n">SC</div>
+        <div class="hero-badge-l">Barbearia</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <section class="section section-alt" aria-labelledby="svc-heading">
+    <div class="container">
+      <div class="section-hd">
+        <div class="t-label" style="margin-bottom:.75rem">Nossos Serviços</div>
+        <h2 class="t-heading" style="font-size:clamp(2rem,5vw,3.5rem)" id="svc-heading">O QUE OFERECEMOS</h2>
+      </div>
+      <div class="svc-grid" id="svc-grid" role="list"></div>
+    </div>
+  </section>
+
+  <!-- LOCALIZAÇÃO PREVIEW -->
+  <section class="section" aria-labelledby="loc-heading">
+    <div class="container">
+      <div class="section-hd">
+        <div class="t-label" style="margin-bottom:.75rem">Onde Estamos</div>
+        <h2 class="t-heading" style="font-size:clamp(2rem,5vw,3.5rem)" id="loc-heading">LOCALIZAÇÃO</h2>
+      </div>
+      <div class="loc-grid">
+        <div class="loc-map-wrap">
+          <iframe id="map1" title="Mapa SC Barbearia"
+            src="" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="loc-info-list" id="loc-home"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img class="footer-brand-logo" src="/images/logo.jpg" alt="SC Barbearia">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),var(--gold-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent">SC Barbearia</span>
+      </div>
+      <span class="footer-copy" id="footer-secret"
+        style="cursor:default;user-select:none"
+        title="">© 2025 SC Barbearia · Serra do Salitre, MG</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BOOKING PAGE
+══════════════════════════════════════════ -->
+<div class="page" id="page-booking">
+  <div class="container bk-wrap">
+    <div class="t-label" style="margin-bottom:.5rem">Sistema de Agendamento</div>
+    <h1 class="t-heading" style="font-size:clamp(2rem,6vw,3.5rem);margin-bottom:2.5rem">AGENDAR HORÁRIO</h1>
+
+    <nav class="progress" aria-label="Passos do agendamento">
+      <div class="prog-step active" id="ps-1"><span class="prog-num">1</span><span class="prog-label">Barbeiro</span></div>
+      <div class="prog-step"        id="ps-2"><span class="prog-num">2</span><span class="prog-label">Serviço</span></div>
+      <div class="prog-step"        id="ps-3"><span class="prog-num">3</span><span class="prog-label">Data &amp; Hora</span></div>
+      <div class="prog-step"        id="ps-4"><span class="prog-num">4</span><span class="prog-label">Seus Dados</span></div>
+      <div class="prog-step"        id="ps-5"><span class="prog-num">5</span><span class="prog-label">Confirmar</span></div>
+    </nav>
+
+    <!-- Passo 1 — Barbeiro -->
+    <div class="step active" id="step-1">
+      <div class="step-label">
+        <div class="t-label">Passo 1 de 5</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.5rem;margin-top:.25rem">ESCOLHA O BARBEIRO</div>
+      </div>
+      <div class="barber-grid" id="bk-barbers" role="listbox" aria-label="Barbeiros disponíveis"></div>
+      <div class="step-actions">
+        <button class="btn btn-solid" onclick="nextStep(1)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Passo 2 — Serviço -->
+    <div class="step" id="step-2">
+      <div class="step-label">
+        <div class="t-label">Passo 2 de 5</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.5rem;margin-top:.25rem">ESCOLHA O SERVIÇO</div>
+      </div>
+      <div class="svc-sel-grid" id="bk-svcs" role="listbox" aria-label="Serviços disponíveis"></div>
+      <div class="step-actions">
+        <button class="btn btn-ghost" onclick="prevStep(2)">← Voltar</button>
+        <button class="btn btn-solid" onclick="nextStep(2)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Passo 3 — Data & Hora -->
+    <div class="step" id="step-3">
+      <div class="step-label">
+        <div class="t-label">Passo 3 de 5</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.5rem;margin-top:.25rem">DATA &amp; HORÁRIO</div>
+      </div>
+      <div class="dt-wrap">
+        <div class="cal-box">
+          <div class="cal-hdr">
+            <button class="cal-arrow" onclick="chM(-1)" aria-label="Mês anterior">‹</button>
+            <span class="cal-month" id="cal-month"></span>
+            <button class="cal-arrow" onclick="chM(1)"  aria-label="Próximo mês">›</button>
+          </div>
+          <div class="cal-days-grid" id="cal-grid" role="grid" aria-label="Calendário"></div>
+        </div>
+        <div class="time-box">
+          <div class="time-title" id="time-title">Selecione uma data</div>
+          <div class="time-grid" id="time-grid" role="listbox" aria-label="Horários disponíveis"></div>
+        </div>
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-ghost" onclick="prevStep(3)">← Voltar</button>
+        <button class="btn btn-solid" onclick="nextStep(3)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Passo 4 — Dados -->
+    <div class="step" id="step-4">
+      <div class="step-label">
+        <div class="t-label">Passo 4 de 5</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.5rem;margin-top:.25rem">SEUS DADOS</div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label" for="c-nome">Nome Completo *</label>
+          <input class="field-input" id="c-nome" type="text" placeholder="João Silva" autocomplete="name">
+        </div>
+        <div class="field">
+          <label class="field-label" for="c-fone">WhatsApp *</label>
+          <input class="field-input" id="c-fone" type="tel" placeholder="(34) 99999-9999" oninput="maskPhone(this)" autocomplete="tel">
+        </div>
+        <div class="field span-2">
+          <label class="field-label" for="c-obs">Observações (opcional)</label>
+          <input class="field-input" id="c-obs" type="text" placeholder="Preferências, estilo, alergias…">
+        </div>
+      </div>
+      <div class="info-note">
+        <span style="font-size:1.1rem;flex-shrink:0;margin-top:.05rem">💬</span>
+        <span>Você receberá uma <strong>confirmação automática</strong> no WhatsApp e um <strong>lembrete 2h antes</strong> do seu horário.</span>
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-ghost" onclick="prevStep(4)">← Voltar</button>
+        <button class="btn btn-solid" onclick="nextStep(4)">Revisar →</button>
+      </div>
+    </div>
+
+    <!-- Passo 5 — Confirmação -->
+    <div class="step" id="step-5">
+      <div class="step-label">
+        <div class="t-label">Passo 5 de 5</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.5rem;margin-top:.25rem">CONFIRMAÇÃO</div>
+      </div>
+      <div class="sum-card" id="sum-card"></div>
+      <div class="info-note">
+        <span style="font-size:1.1rem;flex-shrink:0;margin-top:.05rem">📲</span>
+        <span>Ao confirmar, os detalhes do agendamento serão enviados ao seu WhatsApp.</span>
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-ghost" onclick="prevStep(5)">← Editar</button>
+        <button class="btn btn-solid" onclick="confirmar()">✅ Confirmar Agendamento</button>
+      </div>
+    </div>
+
+    <!-- Sucesso -->
+    <div id="bk-success" style="display:none">
+      <div class="success-wrap">
+        <div class="success-ico">✅</div>
+        <div class="success-h">Agendado!</div>
+        <p class="success-p" id="success-txt"></p>
+        <button class="btn btn-solid" onclick="resetBk()">📅 Novo Agendamento</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOCATION PAGE
+══════════════════════════════════════════ -->
+<div class="page" id="page-location">
+  <div class="container" style="padding-block:clamp(2.5rem,6vw,5rem)">
+    <div class="t-label" style="margin-bottom:.5rem">Como Chegar</div>
+    <h1 class="t-heading" style="font-size:clamp(2rem,6vw,3.5rem);margin-bottom:3rem">LOCALIZAÇÃO</h1>
+    <div class="loc-grid">
+      <div class="loc-map-wrap" style="height:clamp(300px,50vw,500px)">
+        <iframe id="map2" title="Mapa SC Barbearia" style="height:100%"
+          src="" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div>
+        <div class="loc-info-list" id="loc-page" style="margin-bottom:1.5rem"></div>
+        <button class="btn btn-solid btn-full" onclick="navTo('booking')">📅 Agendar Agora</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN PAGE
+══════════════════════════════════════════ -->
+<div class="page" id="page-admin">
+
+  <!-- LOGIN -->
+  <div id="adm-login">
+    <div class="admin-login-screen">
+      <div class="login-card">
+        <img class="login-logo" src="/images/logo.jpg" alt="SC Barbearia">
+        <div class="login-title">Admin</div>
+        <p class="login-sub">Acesso restrito ao proprietário</p>
+        <div class="field" style="margin-bottom:1rem">
+          <label class="field-label" for="l-u">Usuário</label>
+          <input class="field-input" id="l-u" type="text" placeholder="admin" autocomplete="username">
+        </div>
+        <div class="field" style="margin-bottom:1.75rem">
+          <label class="field-label" for="l-p">Senha</label>
+          <input class="field-input" id="l-p" type="password" placeholder="••••••"
+            onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password">
+        </div>
+        <button class="btn btn-solid btn-full" onclick="doLogin()">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="adm-dash" style="display:none">
+    <div class="adm-wrap">
+
+      <!-- Top bar -->
+      <div class="adm-topbar">
+        <div class="adm-brand">
+          <img class="adm-brand-logo" src="/images/logo.jpg" alt="SC Barbearia">
+          <div>
+            <div class="adm-brand-title">SC Barbearia</div>
+            <div class="adm-brand-sub">Painel Administrativo</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.75rem;align-items:center">
+          <a href="/" onclick="navTo('home');return false"
+            style="font-size:.75rem;color:var(--text3);text-decoration:none">🌐 Ver Site</a>
+          <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sair</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="adm-stats" id="adm-stats"></div>
+
+      <!-- Tabs -->
+      <div class="adm-tabs" role="tablist">
+        <button class="adm-tab active" role="tab" onclick="swTab(event,'agend')">📅 Agendamentos</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'barb')">👤 Barbeiros</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'svc')">✂ Serviços</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'loc')">📍 Localização</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'hist')">📜 Histórico</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'rel')">📊 Relatórios</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'senha')">🔑 Senha</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'bloq');loadBloqueios()">🚫 Bloqueios</button>
+        <button class="adm-tab"        role="tab" onclick="swTab(event,'wapp');loadWappStatus()">💬 WhatsApp</button>
+      </div>
+
+      <!-- Agendamentos -->
+      <div class="adm-sec active" id="sec-agend" role="tabpanel">
+        <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center">
+          <input type="date" id="f-data" class="field-input"
+            style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:.45rem .85rem;width:auto"
+            onchange="renderAgend()">
+          <select id="f-status" class="field-input"
+            style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:.45rem .85rem;width:auto"
+            onchange="renderAgend()">
+            <option value="">Todos os status</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="concluido">Concluído</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="renderAgend()">🔄 Atualizar</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Cliente</th><th>WhatsApp</th><th>Barbeiro</th><th>Serviço</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="tb-agend"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Barbeiros -->
+      <div class="adm-sec" id="sec-barb" role="tabpanel">
+        <div class="cards-grid" id="barb-ed"></div>
+      </div>
+
+      <!-- Serviços -->
+      <div class="adm-sec" id="sec-svc" role="tabpanel">
+        <div class="svc-list" id="svc-ed"></div>
+        <button class="btn btn-solid" onclick="openSvcModal()">+ Novo Serviço</button>
+      </div>
+
+      <!-- Localização -->
+      <div class="adm-sec" id="sec-loc" role="tabpanel">
+        <div class="cfg-box">
+          <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:1.5rem">EDITAR LOCALIZAÇÃO</div>
+          <div class="field" style="margin-bottom:1rem">
+            <label class="field-label" for="cfg-end">Endereço Completo</label>
+            <input class="field-input" id="cfg-end" placeholder="Rua das Flores, 123 — Serra do Salitre MG">
+          </div>
+          <div class="field" style="margin-bottom:1rem">
+            <label class="field-label" for="cfg-hrs">Horário de Atendimento</label>
+            <textarea class="field-input" id="cfg-hrs" rows="3"
+              placeholder="Seg – Sex: 08h às 19h&#10;Sábado: 08h às 17h&#10;Domingo: Fechado"></textarea>
+          </div>
+          <div class="field" style="margin-bottom:1rem">
+            <label class="field-label" for="cfg-wa">WhatsApp (somente números)</label>
+            <input class="field-input" id="cfg-wa" placeholder="5534999999999"
+              oninput="this.value=this.value.replace(/\D/g,'')">
+          </div>
+          <div class="field" style="margin-bottom:1rem">
+            <label class="field-label" for="cfg-how">Como Chegar</label>
+            <textarea class="field-input" id="cfg-how" rows="2"
+              placeholder="Fácil acesso pelo centro. Estacionamento disponível na frente."></textarea>
+          </div>
+          <div class="field" style="margin-bottom:.5rem">
+            <label class="field-label" for="cfg-maps">Link do Google Maps (Embed)</label>
+            <textarea class="field-input" id="cfg-maps" rows="3"
+              placeholder='Cole aqui o código &lt;iframe...&gt; do Google Maps ou só o link src="..."'></textarea>
+            <small style="color:var(--text3);font-size:.72rem;line-height:1.4;display:block;margin-top:.4rem">
+              No Google Maps: clique em <strong>Compartilhar → Incorporar um mapa</strong> e cole o código &lt;iframe&gt; aqui.
+            </small>
+          </div>
+          <button class="btn btn-solid" onclick="saveLoc()">💾 Salvar Localização</button>
+        </div>
+
+        <!-- Horários de Funcionamento -->
+        <div class="cfg-box" style="margin-top:1.5rem">
+          <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:1.5rem">HORÁRIOS DE FUNCIONAMENTO</div>
+          <div id="hf-grid" style="display:flex;flex-direction:column;gap:.75rem"></div>
+          <button class="btn btn-solid" style="margin-top:1.25rem" onclick="saveHorariosFuncionamento()">💾 Salvar Horários</button>
+        </div>
+      </div>
+
+      <!-- Histórico -->
+      <div class="adm-sec" id="sec-hist" role="tabpanel">
+        <div class="tbl-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Cliente</th><th>WhatsApp</th><th>Visitas</th><th>Último Serviço</th><th>Última Visita</th></tr></thead>
+            <tbody id="tb-hist"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Relatórios -->
+      <div class="adm-sec" id="sec-rel" role="tabpanel">
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:2rem">
+          <div style="display:flex;background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);overflow:hidden">
+            <button id="rel-btn-dia"     class="rel-period-btn active" onclick="setRelPeriod('dia')">Hoje</button>
+            <button id="rel-btn-semana"  class="rel-period-btn"        onclick="setRelPeriod('semana')">Esta Semana</button>
+            <button id="rel-btn-mes"     class="rel-period-btn"        onclick="setRelPeriod('mes')">Este Mês</button>
+            <button id="rel-btn-custom"  class="rel-period-btn"        onclick="setRelPeriod('custom')">Personalizado</button>
+          </div>
+          <div id="rel-custom-dates" style="display:none;gap:.5rem;align-items:center;flex-wrap:wrap">
+            <input type="date" id="rel-start" class="field-input"
+              style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:.45rem .85rem;width:auto">
+            <span style="color:var(--text3);font-size:.8rem">até</span>
+            <input type="date" id="rel-end" class="field-input"
+              style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:.45rem .85rem;width:auto">
+            <button class="btn btn-outline btn-sm" onclick="buildRelatorio()">Filtrar</button>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="printRelatorio()">🖨 Imprimir</button>
+        </div>
+
+        <!-- Resumo stats -->
+        <div id="rel-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1rem;margin-bottom:2rem"></div>
+
+        <!-- Gráfico -->
+        <div style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:1.75rem;margin-bottom:2rem">
+          <div id="rel-chart-title" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:1.25rem">AGENDAMENTOS POR DIA</div>
+          <div id="rel-chart" style="display:flex;align-items:flex-end;gap:6px;height:140px;padding-bottom:.5rem"></div>
+          <div id="rel-chart-labels" style="display:flex;gap:6px;margin-top:.4rem"></div>
+        </div>
+
+        <!-- Top -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem" id="rel-double-col">
+          <div style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:1.5rem">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:1.25rem">TOP SERVIÇOS</div>
+            <div id="rel-top-svcs"></div>
+          </div>
+          <div style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:1.5rem">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:1.25rem">TOP BARBEIROS</div>
+            <div id="rel-top-barbs"></div>
+          </div>
+        </div>
+
+        <!-- Tabela detalhada -->
+        <div style="background:var(--ink2);border:1px solid var(--ink4);border-radius:var(--r);padding:1.5rem">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:1.25rem">DETALHAMENTO</div>
+          <div class="tbl-wrap">
+            <table class="data-tbl" id="rel-table">
+              <thead><tr><th>Data</th><th>Cliente</th><th>Barbeiro</th><th>Serviço</th><th>Valor</th><th>Status</th></tr></thead>
+              <tbody id="rel-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloqueios -->
+      <div class="adm-sec" id="sec-bloq" role="tabpanel">
+        <div class="cfg-box" style="max-width:500px;margin-bottom:1.5rem">
+          <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:1.5rem">NOVO BLOQUEIO</div>
+          <div class="form-grid" style="margin-bottom:1rem">
+            <div class="field-wrap">
+              <label class="field-lbl">Tipo</label>
+              <select id="bloq-tipo" class="field-input" onchange="toggleBloqHorario()">
+                <option value="dia">Dia inteiro</option>
+                <option value="horario">Horário específico</option>
+              </select>
+            </div>
+            <div class="field-wrap">
+              <label class="field-lbl">Data</label>
+              <input type="date" id="bloq-data" class="field-input">
+            </div>
+          </div>
+          <div class="form-grid" style="margin-bottom:1rem">
+            <div class="field-wrap" id="bloq-hora-wrap" style="display:none">
+              <label class="field-lbl">Horário</label>
+              <select id="bloq-hora" class="field-input"></select>
+            </div>
+            <div class="field-wrap">
+              <label class="field-lbl">Barbeiro</label>
+              <select id="bloq-barb" class="field-input">
+                <option value="">Todos os barbeiros</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-wrap" style="margin-bottom:1.5rem">
+            <label class="field-lbl">Motivo (opcional)</label>
+            <input type="text" id="bloq-motivo" class="field-input" placeholder="Ex: Feriado, Folga, Evento...">
+          </div>
+          <button class="btn btn-solid" onclick="criarBloqueio()">🚫 Bloquear</button>
+        </div>
+        <div class="t-heading" style="font-size:1rem;color:var(--text3);margin-bottom:.75rem;letter-spacing:2px">BLOQUEIOS ATIVOS</div>
+        <div class="tbl-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Data</th><th>Tipo</th><th>Horário</th><th>Barbeiro</th><th>Motivo</th><th></th></tr></thead>
+            <tbody id="tb-bloq"><tr><td colspan="6" style="text-align:center;color:var(--text3)">Nenhum bloqueio</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Senha -->
+      <div class="adm-sec" id="sec-senha" role="tabpanel">
+        <div style="display:flex;flex-wrap:wrap;gap:1.5rem">
+
+          <!-- Alterar usuário -->
+          <div class="cfg-box" style="max-width:400px;flex:1">
+            <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:1.5rem">ALTERAR USUÁRIO</div>
+            <div class="field-wrap" style="margin-bottom:1rem">
+              <label class="field-lbl">Novo Usuário</label>
+              <input type="text" id="u-novo" class="field-input" placeholder="Digite o novo usuário">
+            </div>
+            <div class="field-wrap" style="margin-bottom:1.5rem">
+              <label class="field-lbl">Senha Atual (confirmação)</label>
+              <input type="password" id="u-senha" class="field-input" placeholder="Digite sua senha atual">
+            </div>
+            <button class="btn btn-solid" onclick="alterarUsuario()">Salvar Novo Usuário</button>
+            <div id="usuario-msg" style="margin-top:1rem;font-size:.85rem"></div>
+          </div>
+
+          <!-- Alterar senha -->
+          <div class="cfg-box" style="max-width:400px;flex:1">
+            <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:1.5rem">ALTERAR SENHA</div>
+            <div class="field-wrap" style="margin-bottom:1rem">
+              <label class="field-lbl">Senha Atual</label>
+              <input type="password" id="s-atual" class="field-input" placeholder="Digite a senha atual">
+            </div>
+            <div class="field-wrap" style="margin-bottom:1rem">
+              <label class="field-lbl">Nova Senha</label>
+              <input type="password" id="s-nova" class="field-input" placeholder="Mínimo 6 caracteres">
+            </div>
+            <div class="field-wrap" style="margin-bottom:1.5rem">
+              <label class="field-lbl">Confirmar Nova Senha</label>
+              <input type="password" id="s-conf" class="field-input" placeholder="Repita a nova senha">
+            </div>
+            <button class="btn btn-solid" onclick="alterarSenha()">Salvar Nova Senha</button>
+            <div id="senha-msg" style="margin-top:1rem;font-size:.85rem"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="adm-sec" id="sec-wapp" role="tabpanel">
+        <div class="cfg-box" style="max-width:480px;text-align:center">
+          <div class="t-heading" style="font-size:1.4rem;color:var(--gold-lt);margin-bottom:.5rem">💬 WHATSAPP</div>
+          <div id="wapp-status-badge" style="display:inline-block;padding:.3rem 1rem;border-radius:2rem;font-size:.8rem;font-weight:700;margin-bottom:1.5rem">...</div>
+          <div id="wapp-qr-wrap" style="display:none;margin-bottom:1.5rem">
+            <p style="color:var(--text3);font-size:.85rem;margin-bottom:1rem">Escaneie o QR Code com o WhatsApp do celular</p>
+            <img id="wapp-qr-img" src="" alt="QR Code" style="width:220px;height:220px;border-radius:12px;border:2px solid var(--gold)">
+          </div>
+          <div id="wapp-code-wrap" style="display:none;margin-bottom:1.5rem">
+            <p style="color:var(--text3);font-size:.85rem;margin-bottom:.75rem">Digite este código no celular:</p>
+            <div id="wapp-code" style="font-family:monospace;font-size:2rem;font-weight:700;letter-spacing:.3rem;color:var(--gold-lt);padding:.75rem 1rem;border:2px solid var(--gold);border-radius:12px;display:inline-block">----</div>
+            <ol style="text-align:left;color:var(--text3);font-size:.8rem;margin:1rem auto 0;max-width:340px;line-height:1.6">
+              <li>Abra o WhatsApp no celular</li>
+              <li>Toque em <b>⋮</b> (ou Configurações) → <b>Aparelhos conectados</b></li>
+              <li>Toque em <b>Conectar um aparelho</b></li>
+              <li>Toque em <b>Conectar com número de telefone</b> e digite o código</li>
+            </ol>
+          </div>
+          <div id="wapp-loading" style="display:none;margin-bottom:1.5rem;color:var(--text3);font-size:.85rem">⏳ Preparando conexão, aguarde alguns segundos...</div>
+          <div id="wapp-metodos" style="display:none;margin-bottom:1.5rem;text-align:left">
+            <p style="color:var(--text3);font-size:.85rem;margin-bottom:1rem;text-align:center">Escolha como conectar o WhatsApp da barbearia:</p>
+            <button class="btn btn-solid" onclick="conectarWhatsapp('qr')" style="width:100%;justify-content:center;margin-bottom:1rem">📷 Conectar com QR Code</button>
+            <div style="border-top:1px solid var(--border,#333);padding-top:1rem">
+              <label for="wapp-fone" style="display:block;color:var(--text3);font-size:.8rem;margin-bottom:.4rem">Ou pelo número do celular (com DDD):</label>
+              <div style="display:flex;gap:.5rem">
+                <input id="wapp-fone" class="field-input" type="tel" inputmode="numeric" placeholder="34 99999-9999" style="flex:1;min-width:0">
+                <button class="btn" onclick="conectarWhatsapp('codigo')">🔢 Gerar código</button>
+              </div>
+            </div>
+          </div>
+          <div id="wapp-connected-info" style="display:none;margin-bottom:1.5rem">
+            <div style="font-size:3rem">✅</div>
+            <p style="color:#2ecc71;font-weight:700;margin:.5rem 0">WhatsApp Conectado!</p>
+            <p style="color:var(--text3);font-size:.85rem">Mensagens automáticas estão ativas.</p>
+          </div>
+          <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+            <button id="wapp-btn-cancelar" class="btn" onclick="desconectarWhatsapp()" style="display:none">↩ Trocar forma de conexão</button>
+            <button id="wapp-btn-desconectar" class="btn" onclick="desconectarWhatsapp()" style="display:none;border-color:#e74c3c;color:#e74c3c">Desconectar</button>
+            <button id="wapp-btn-trocar" class="btn" onclick="trocarNumeroWhatsapp()" style="display:none;border-color:#e67e22;color:#e67e22">🔄 Trocar Número</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.adm-wrap -->
+  </div><!-- /#adm-dash -->
+</div><!-- /#page-admin -->
+
+<!-- ░░ MODAL — Barbeiro ░░ -->
+<div class="modal-overlay" id="modal-barb" role="dialog" aria-modal="true" aria-labelledby="mb-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mb-title">Adicionar Barbeiro</div>
+      <button class="modal-close" onclick="closeModal('modal-barb')" aria-label="Fechar">✕</button>
+    </div>
+    <div class="photo-upload" id="pu" onclick="document.getElementById('pu-input').click()">
+      <img class="photo-upload-prev" id="pu-prev" alt="Foto do barbeiro">
+      <div class="photo-upload-ph">
+        <div style="font-size:2.25rem;margin-bottom:.5rem">📷</div>
+        <div style="font-size:.8rem;color:var(--text3)">Clique para <span style="color:var(--gold-lt);font-weight:600">enviar foto</span><br><small>JPG ou PNG · máx 5MB</small></div>
+      </div>
+      <input type="file" id="pu-input" accept="image/*" onchange="prevFoto(event)">
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label class="field-label" for="mb-n">Nome *</label>
+      <input class="field-input" id="mb-n" placeholder="Carlos Oliveira">
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label class="field-label" for="mb-s">Especialidade</label>
+      <input class="field-input" id="mb-s" placeholder="Degradê, Barba, Risquinho">
+    </div>
+    <div class="field">
+      <label class="field-label" for="mb-e">Emoji (se sem foto)</label>
+      <input class="field-input" id="mb-e" placeholder="💈">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost"  onclick="closeModal('modal-barb')">Cancelar</button>
+      <button class="btn btn-solid"  onclick="saveBarb()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ MODAL — Serviço ░░ -->
+<div class="modal-overlay" id="modal-svc" role="dialog" aria-modal="true" aria-labelledby="ms-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="ms-title">Adicionar Serviço</div>
+      <button class="modal-close" onclick="closeModal('modal-svc')" aria-label="Fechar">✕</button>
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label class="field-label" for="ms-n">Nome *</label>
+      <input class="field-input" id="ms-n" placeholder="Corte + Barba">
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label class="field-label" for="ms-p">Preço (R$) *</label>
+      <input class="field-input" id="ms-p" type="number" step="0.01" placeholder="55.00">
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label class="field-label" for="ms-d">Duração (min) *</label>
+      <input class="field-input" id="ms-d" type="number" placeholder="50">
+    </div>
+    <div class="field">
+      <label class="field-label" for="ms-i">Ícone emoji</label>
+      <input class="field-input" id="ms-i" placeholder="✂">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-svc')">Cancelar</button>
+      <button class="btn btn-solid" onclick="saveSvc()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ TOAST ░░ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ░░ SCRIPTS ░░ — a ordem importa: utils.js primeiro, main.js por último (ver js/utils.js) -->
+<script src="/js/utils.js?v=5"></script>
+<script src="/js/site.js?v=5"></script>
+<script src="/js/agendamento.js?v=5"></script>
+<script src="/js/admin.js?v=5"></script>
+<script src="/js/admin-whatsapp.js?v=5"></script>
+<script src="/js/relatorios.js?v=5"></script>
+<script src="/js/main.js?v=5"></script>
+</body>
+</html>

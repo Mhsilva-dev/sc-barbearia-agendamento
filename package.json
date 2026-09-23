@@ -1,0 +1,14 @@
+{
+  "name": "sc-barbearia",
+  "version": "1.0.0",
+  "description": "Sistema completo de agendamento SC Barbearia — Serra do Salitre MG",
+  "private": true,
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "install:deps": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

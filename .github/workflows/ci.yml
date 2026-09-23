@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Instalar dependências
+        working-directory: backend
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+        run: npm ci --omit=dev
+
+      - name: Verificar sintaxe
+        run: find backend frontend -name '*.js' -not -path '*/node_modules/*' -print0 | xargs -0 -n1 node --check
+
+      - name: Subir o servidor e testar /api/health
+        working-directory: backend
+        env:
+          PORT: 3000
+          JWT_SECRET: ci
+          ADMIN_PASS: ci
+        run: |
+          node server.js > server.log 2>&1 &
+          for i in $(seq 1 15); do
+            curl -sf http://localhost:3000/api/health && exit 0
+            sleep 1
+          done
+          cat server.log
+          exit 1
