@@ -4,6 +4,10 @@
 
 Sistema de agendamento online desenvolvido para a **SC Barbearia** (Serra do Salitre, MG) e usado em produção pela barbearia.
 
+**🔗 Sistema em produção:** [sc-barbearia.agdex.com.br](https://sc-barbearia.agdex.com.br)
+
+> Este é o sistema real, usado pelos clientes da barbearia. Fique à vontade para navegar, mas evite concluir agendamentos de teste, porque eles entram na agenda de verdade.
+
 O cliente escolhe barbeiro, serviço, data e horário direto pelo celular. Ao finalizar, recebe a confirmação no WhatsApp e, duas horas antes do horário, um lembrete automático. O dono da barbearia gerencia tudo por um painel administrativo: agenda do dia, barbeiros, serviços, horários de funcionamento, bloqueios e relatórios de faturamento.
 
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)
