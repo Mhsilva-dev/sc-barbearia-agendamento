@@ -116,4 +116,4 @@ Em produção, a aplicação roda em uma VPS Linux com **PM2** e **Nginx** como 
 
 ## Autor
 
-Desenvolvido por **Matheus Henrique Fonseca Silva** — [github.com/Mhsilva-dev](https://github.com/Mhsilva-dev)
+Desenvolvido por **Matheus Henrique Fonseca Silva** — [GitHub](https://github.com/Mhsilva-dev) · [LinkedIn](https://www.linkedin.com/in/matheus-silva-01b8b3433)
